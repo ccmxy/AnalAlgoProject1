@@ -134,7 +134,7 @@ with open("MSS_Problems.txt", "r") as ins:
                     print("\n\n\n\n\t\t\tTESTING ARRAY NUMBER:"),
                     print(idx)
 
-                    setup = "from __main__ import betterEnumeration, enumeration, linearTime, findmaxarray, printArray, line, nowMaxBeg, nowMaxEnd"
+                    setup = "from __main__ import betterEnumeration, enumeration, linearTime, findmaxarray, line"
                     enum = "enumeration(line, len(line))"
 
                     nowMaxBeg, nowMaxEnd, maxSum = enumeration(line, len(line))
@@ -182,31 +182,26 @@ def testFunction(arrayOfArrays):
     betterEnumTimes= []
     linearTimeTimes = []
     divideAndConquerTimes = []
-    nowMaxBeg = 0
-    nowMaxEnd = 0
-    maxSum = 0
 
     for line in arrayOfArrays:
 
-        setup = "from __main__ import betterEnumeration, enumeration, linearTime, findmaxarray, printArray, line, nowMaxBeg, nowMaxEnd, maxSum"
+        setup = "from __main__ import betterEnumeration, enumeration, linearTime, findmaxarray, printArray, line"
         enumCall = "enumeration(line, len(line))"
         betterEnumCall = "betterEnumeration(line, len(line))"
         linearTimeCall = "linearTime(line, len(line))"
-        findMaxCall = "findmaxarray(line, 0, len(line)-1)"
+        #findMaxCall = "findmaxarray(line, 0, len(line)-1)"
+        print(line)
+        try:
+            findmaxarray(line, 0, len(line) - 1)
+            print timeit.timeit("findmaxarray(line, 0, len(line) - 1)", setup, number=1),
+            print("Try successful")
+        except:
+            print "EE"
 
         enumTimes.append(timeit.timeit(enumCall, setup, number=1))
         betterEnumTimes.append(timeit.timeit(betterEnumCall, setup, number=1))
         linearTimeTimes.append(timeit.timeit(linearTimeCall, setup, number=1))
-        nowMaxBeg, nowMaxEnd, maxSum = findmaxarray(line, 0, len(line) - 1)
-        printArray(line, nowMaxBeg, nowMaxEnd, maxSum, 'Divide and Conquer:')
-        #print(timeit.timeit("nowMaxBeg, nowMaxEnd, maxSum = findmaxarray(line, 0, len(line) - 1)", setup, number=1))
-
-        try:
-            print timeit.timeit("nowMaxBeg, nowMaxEnd, maxSum = findmaxarray(line, 0, len(line) - 1)", setup, number=1),
-            print("YOSHI")
-        except:
-            print "EE"
-        #divideAndConquerTimes.append(timeit.timeit("findmaxarray(line, 0, len(line) - 1)", setup, number=1))
+        #divideAndConquerTimes.append(timeit.timeit("findMaxCall", setup, number=1))
 
     print("\n\nEnum average for size n ="),
     print(len(line)),
