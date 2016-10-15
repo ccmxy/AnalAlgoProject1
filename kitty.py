@@ -196,8 +196,10 @@ def testFunction(arrayOfArrays):
             print("Max found by findmaxarray: "),
             print(c)
 
-            #print timeit.timeit("a, b, c = findmaxarray(line, 0, len(line) - 1)", setup, number=1)
-            divideAndConquerTimes.append(timeit.timeit(findMaxCall, setup, number=1))
+            print timeit.timeit("a, b, c = findmaxarray(line, 0, len(line) - 1)", setup, number=1)
+            #print timeit.timeit(findMaxCall, setup, number=1)
+            #divideAndConquerTimes.append(timeit.timeit(findMaxCall, setup, number=1))
+
             print("Try successful")
         except:
             print "EE"
