@@ -113,7 +113,6 @@ def findmaxarray(alist, low, high):
             return crosslow, crosshigh, crosssum
 
 
-
 with open("MSS_Problems.txt", "r") as ins:
     #index to hold the line number
     idx = 0
@@ -174,7 +173,7 @@ def getTheAvg(array):
     return total/len(array)
 
 def testFunction(arrayOfArrays):
-    print(" ################## TESTS ON ARRAYS OF LENGTH "),
+    print("\n\n ################## TESTS ON ARRAYS OF LENGTH "),
     print(len(arrayOfArrays[0])),
     print ("##################")
 
@@ -185,15 +184,20 @@ def testFunction(arrayOfArrays):
 
     for line in arrayOfArrays:
 
-        setup = "from __main__ import betterEnumeration, enumeration, linearTime, findmaxarray, printArray, line"
+        setup = "from __main__ import betterEnumeration, enumeration, linearTime, findmaxarray, line"
         enumCall = "enumeration(line, len(line))"
         betterEnumCall = "betterEnumeration(line, len(line))"
         linearTimeCall = "linearTime(line, len(line))"
-        #findMaxCall = "findmaxarray(line, 0, len(line)-1)"
-        print(line)
+        findMaxCall = "findmaxarray(line, 0, len(line)-1)"
+
         try:
-            findmaxarray(line, 0, len(line) - 1)
-            print timeit.timeit("findmaxarray(line, 0, len(line) - 1)", setup, number=1),
+
+            a, b, c = findmaxarray(line, 0, len(line) - 1)
+            print("Max found by findmaxarray: "),
+            print(c)
+
+            #print timeit.timeit("a, b, c = findmaxarray(line, 0, len(line) - 1)", setup, number=1)
+            divideAndConquerTimes.append(timeit.timeit(findMaxCall, setup, number=1))
             print("Try successful")
         except:
             print "EE"
@@ -201,26 +205,26 @@ def testFunction(arrayOfArrays):
         enumTimes.append(timeit.timeit(enumCall, setup, number=1))
         betterEnumTimes.append(timeit.timeit(betterEnumCall, setup, number=1))
         linearTimeTimes.append(timeit.timeit(linearTimeCall, setup, number=1))
-        #divideAndConquerTimes.append(timeit.timeit("findMaxCall", setup, number=1))
+        #divideAndConquerTimes.append(timeit.timeit(findMaxCall, setup, number=1))
 
     print("\n\nEnum average for size n ="),
     print(len(line)),
-    print(":")
+    print(":"),
     print(getTheAvg(enumTimes))
 
-    print("\n\nBetterEnumeration average for size n ="),
+    print("BetterEnumeration average for size n ="),
     print(len(line)),
-    print(":")
+    print(":"),
     print(getTheAvg(betterEnumTimes))
 
-    print("\n\nlinearTime average for size n ="),
+    print("linearTime average for size n ="),
     print(len(line)),
-    print(":")
+    print(":"),
     print(getTheAvg(linearTimeTimes))
 
-    # print("\n\nDivide and conquer average for size n ="),
+    # print("Divide and conquer average for size n ="),
     # print(len(line)),
-    # print(":")
+    # print(":"),
     # print(getTheAvg(divideAndConquerTimes))
 
 
