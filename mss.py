@@ -1,5 +1,22 @@
 
+import timeit
+import random
 
+#File full of int arrys to be opened when the prgram executes
+CONST_FILE_NAME = "MSS_PROBLEMS.txt"
+
+
+def printArray(array, begSub, endSub, maxSum, functionName):
+    print("\n=================")
+    print(functionName)
+    print("=================")
+    print(array)
+    subArray = []
+    for j in range(begSub, endSub+1):
+        subArray.append(array[j])
+    print(subArray)
+    print("Max: "),
+    print(maxSum)
 
 def enumeration(a, n):
     sum = 0
@@ -16,16 +33,8 @@ def enumeration(a, n):
                     nowMaxBeg = i
                     nowMaxEnd = j
                     current = sum
+    return nowMaxBeg, nowMaxEnd, current;
 
-    print("\n============")
-    print("Enumeration:")
-    print("============")
-    print("Start:"),
-    print(nowMaxBeg),
-    print("End:"),
-    print(nowMaxEnd),
-    print("Max:"),
-    print(current)
 
 def betterEnumeration(a, n):
     sum = 0
@@ -41,42 +50,26 @@ def betterEnumeration(a, n):
                 current = sum
                 nowMaxBeg = i
                 nowMaxEnd = j
-    print("\n============")
-    print("Better Enumeration:")
-    print("============")
-    print("Start:"),
-    print(nowMaxBeg),
-    print("End:"),
-    print(nowMaxEnd),
-    print("Max:"),
-    print(current)
+
+    return nowMaxBeg, nowMaxEnd, current
 
 
 def linearTime(myArray, n):
-    sum = 0
-    x = 0
+    max = 0
+    currSum = 0
     nowMaxBeg = 0
     nowMaxEnd = 0
 
     for i in range(0, n):
-        if x < 0:
-            x = myArray[i]
+        if currSum < 0:
+            currSum = myArray[i]
             nowMaxBeg = i
         else:
-            x = x + myArray[i]
-        if sum < x:
-            sum = x
+            currSum = currSum + myArray[i]
+        if max < currSum:
+            max = currSum
             nowMaxEnd = i
-
-    print("\n============")
-    print("Linear Time:")
-    print("============")
-    print("Start: "),
-    print(nowMaxBeg),
-    print("End: "),
-    print(nowMaxEnd),
-    print("Max: "),
-    print(sum)
+    return nowMaxBeg, nowMaxEnd, max
 
 
 def crossingsubarray(A, low, mid, high):
@@ -90,7 +83,6 @@ def crossingsubarray(A, low, mid, high):
             leftindex = i
     left = negetiveinfinity
 
-
     negetiveinfinity = -10000000000
     summ = 0
 
@@ -102,7 +94,6 @@ def crossingsubarray(A, low, mid, high):
     right = negetiveinfinity
 
     return(leftindex, rightindex, left + right)
-
 
 
 def findmaxarray(alist, low, high):
@@ -126,11 +117,13 @@ def findmaxarray(alist, low, high):
             return crosslow, crosshigh, crosssum
 
 
-
-
-with open("MSS_Problems.txt", "r") as ins:
+with open(CONST_FILE_NAME, "r") as ins:
     #index to hold the line number
     idx = 0
+    nowMaxBeg = 0
+    nowMaxEnd = 0
+    sum = 0
+
     for line in ins:
 
         #strip string of extra characters
@@ -142,18 +135,31 @@ with open("MSS_Problems.txt", "r") as ins:
         if len(line) > 0:
                     idx += 1
                     print("\n\n\n\n\t\t\tTESTING ARRAY NUMBER:"),
-                    print(idx)
-                    print(line)
-                    enumeration(line, len(line))
-                    betterEnumeration(line, len(line))
-                    linearTime(line, len(line))
-                    L,H,maxi = findmaxarray(line, 0, len(line) - 1)
-                    print("\n============")
-                    print("Divide and Conquer:")
-                    print("============")
-                    print("Start: "),
-                    print(L),
-                    print("End: "),
-                    print(H),
-                    print("Max: "),
-                    print(maxi)
+                    print(idx),
+                    print("(n = "),
+                    print(len(line)),
+                    print(")")
+
+
+                    setup = "from __main__ import betterEnumeration, enumeration, linearTime, findmaxarray, line"
+                    enum = "enumeration(line, len(line))"
+
+                    nowMaxBeg, nowMaxEnd, maxSum = enumeration(line, len(line))
+                    printArray(line, nowMaxBeg, nowMaxEnd, maxSum, 'Enumeration:')
+                    print timeit.timeit(enum, setup, number=1),
+                    print("microseconds")
+
+                    nowMaxBeg, nowMaxEnd, maxSum = betterEnumeration(line, len(line))
+                    printArray(line, nowMaxBeg, nowMaxEnd, maxSum, 'Better Enumeration:')
+                    print timeit.timeit("betterEnumeration(line, len(line))", setup, number=1),
+                    print("microseconds")
+
+                    nowMaxBeg, nowMaxEnd, maxSum = linearTime(line, len(line))
+                    printArray(line, nowMaxBeg, nowMaxEnd, maxSum, 'Linear Time:')
+                    print timeit.timeit("linearTime(line, len(line))", setup, number=1),
+                    print("microseconds")
+
+                    nowMaxBeg, nowMaxEnd, maxSum = findmaxarray(line, 0, len(line) - 1)
+                    printArray(line, nowMaxBeg, nowMaxEnd, maxSum, 'Divide and Conquer:')
+                    print timeit.timeit("findmaxarray(line, 0, len(line) - 1)", setup, number=1),
+                    print("microseconds")
