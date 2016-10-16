@@ -18,6 +18,10 @@ def printArray(array, begSub, endSub, maxSum, functionName):
     print("Max: "),
     print(maxSum)
 
+# # # # # # # # # # # #
+# 1: Enumeration
+# # # # # # # # # # # #
+
 def enumeration(a, n):
     sum = 0
     current = 0
@@ -35,6 +39,10 @@ def enumeration(a, n):
                     current = sum
     return nowMaxBeg, nowMaxEnd, current;
 
+
+# # # # # # # # # # # #
+# 2: Better Enumeration
+# # # # # # # # # # # #
 
 def betterEnumeration(a, n):
     sum = 0
@@ -54,6 +62,10 @@ def betterEnumeration(a, n):
     return nowMaxBeg, nowMaxEnd, current
 
 
+# # # # # # # # # # # #
+# 3: Linear
+# # # # # # # # # # # #
+
 def linearTime(myArray, n):
     max = 0
     currSum = 0
@@ -72,31 +84,34 @@ def linearTime(myArray, n):
     return nowMaxBeg, nowMaxEnd, max
 
 
-def crossingsubarray(A, low, mid, high):
+# # # # # # # # # # # #
+# 4: Divide and Conquer
+# # # # # # # # # # # #
 
+#This function is cohesive with findMaximumSubarray
+def maxCrossingSubaray(A, low, mid, high):
     negetiveinfinity = -10000000000
-    summ = 0
+    sum = 0
     for i in range(mid, low - 1, -1):
-        summ = summ + A[i]
-        if summ > negetiveinfinity:
-            negetiveinfinity = summ
+        sum = sum + A[i]
+        if sum > negetiveinfinity:
+            negetiveinfinity = sum
             leftindex = i
     left = negetiveinfinity
 
     negetiveinfinity = -10000000000
-    summ = 0
+    sum = 0
 
     for j in range(mid+1, high+1):
-        summ = summ + A[j]
-        if summ > negetiveinfinity:
-            negetiveinfinity = summ
+        sum = sum + A[j]
+        if sum > negetiveinfinity:
+            negetiveinfinity = sum
             rightindex = j
     right = negetiveinfinity
 
     return(leftindex, rightindex, left + right)
 
-
-def findmaxarray(alist, low, high):
+def findMaximumSubarray(alist, low, high):
 
     if high == low:
         return low, high, alist[low]
@@ -105,9 +120,9 @@ def findmaxarray(alist, low, high):
 
         mid = (low+high)/2
 
-        leftlow, lefthigh, leftsum = findmaxarray(alist, low, mid)
-        rightlow, righthigh, rightsum = findmaxarray(alist, mid + 1, high)
-        crosslow, crosshigh, crosssum = crossingsubarray(alist, low, mid, high)
+        leftlow, lefthigh, leftsum = findMaximumSubarray(alist, low, mid)
+        rightlow, righthigh, rightsum = findMaximumSubarray(alist, mid + 1, high)
+        crosslow, crosshigh, crosssum = maxCrossingSubaray(alist, low, mid, high)
 
         if leftsum >= rightsum and leftsum >= crosssum:
             return leftlow, lefthigh, leftsum
@@ -117,6 +132,9 @@ def findmaxarray(alist, low, high):
             return crosslow, crosshigh, crosssum
 
 
+# # # # # # # # # # # #
+# Open file and print results
+# # # # # # # # # # # #
 with open(CONST_FILE_NAME, "r") as ins:
     #index to hold the line number
     idx = 0
@@ -141,7 +159,7 @@ with open(CONST_FILE_NAME, "r") as ins:
                     print(")")
 
 
-                    setup = "from __main__ import betterEnumeration, enumeration, linearTime, findmaxarray, line"
+                    setup = "from __main__ import betterEnumeration, enumeration, linearTime, findMaximumSubarray, line"
                     enum = "enumeration(line, len(line))"
 
                     nowMaxBeg, nowMaxEnd, maxSum = enumeration(line, len(line))
@@ -159,7 +177,7 @@ with open(CONST_FILE_NAME, "r") as ins:
                     print timeit.timeit("linearTime(line, len(line))", setup, number=1),
                     print("microseconds")
 
-                    nowMaxBeg, nowMaxEnd, maxSum = findmaxarray(line, 0, len(line) - 1)
+                    nowMaxBeg, nowMaxEnd, maxSum = findMaximumSubarray(line, 0, len(line) - 1)
                     printArray(line, nowMaxBeg, nowMaxEnd, maxSum, 'Divide and Conquer:')
-                    print timeit.timeit("findmaxarray(line, 0, len(line) - 1)", setup, number=1),
+                    print timeit.timeit("findMaximumSubarray(line, 0, len(line) - 1)", setup, number=1),
                     print("microseconds")
